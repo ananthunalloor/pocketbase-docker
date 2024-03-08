@@ -1,4 +1,13 @@
 ## Overview
 
-This repository provides an example of running Pocketbase and is published to Dockerhub. I will keep this updated with each major version of Pocketbase as a Docker Tag. 
-An official image may be released based on this image, see https://github.com/pocketbase/pocketbase/issues/92. 
+
+Run flyctl launch --build-only
+
+Run flyctl volumes create pb_data --size=1
+
+add to fly.toml
+[mounts]
+  destination = "/pb/pb_data"
+  source = "pb_data"
+
+Run flyctl deploy
