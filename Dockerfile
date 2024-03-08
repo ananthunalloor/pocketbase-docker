@@ -1,9 +1,6 @@
-# syntax=docker/dockerfile:1
-# MAINTAINER "Brian Scott <dev@bscott.mozmail.com>"
+FROM alpine:latest
 
-FROM alpine:3.6
-
-ARG POCKETBASE_VERSION=0.2.8
+ARG PB_VERSION=0.22.3
 
 # Install the dependencies
 RUN apk add --no-cache \
@@ -11,17 +8,16 @@ RUN apk add --no-cache \
     unzip \
     wget \
     zip \
-    zlib-dev
+    zlib-dev \
+    openssh
 
 # Download Pocketbase and install it for AMD64
-ADD https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip /tmp/pocketbase.zip
-RUN unzip /tmp/pocketbase.zip -d /usr/local/bin/
-RUN chmod +x /usr/local/bin/pocketbase
-
+ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
+RUN unzip /tmp/pb.zip -d /pb/
 
 
 # Notify Docker that the container wants to expose a port.
-EXPOSE 8090
+EXPOSE 8080
 
 # Start Pocketbase
-CMD [ "/usr/local/bin/pocketbase", "serve" ]
+CMD [ "/pb/pocketbase", "serve", "--http=0.0.0.0:8080" ]
